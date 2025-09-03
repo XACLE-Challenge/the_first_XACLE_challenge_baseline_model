@@ -1,0 +1,79 @@
+{
+    "train_list"    : "./datasets/data/data_list_for_benchmark_model/train_mos.txt",
+    "val_list"      : "./datasets/data/data_list_for_benchmark_model/val_mos.txt",
+    "test_list"     : "./datasets/data/data_list_for_benchmark_model/ev_mos.txt",
+    "wav_dir"       : "./datasets/data/wav",
+    "output_dir"    : "./models/chkpt_benchmark_model",
+    "batch_size": 12,
+    "val_batch_size": 1,
+    "lr": 2e-5,
+    "num_workers": 8,
+    "epochs": 20,
+    "max_len": 10,
+    "early_stop_patience": 10,
+    "device": "cuda",
+    "loss": {
+        "loss_weights": [1.0, 0.5],
+        "clipped_mse": {
+        "tau": 0.25,
+        "mode": "utt",
+        "beta": 0.99,
+        "cbl": true
+        },
+        "contrastive": {
+        "margin": 0.1,
+        "beta": 0.99,
+        "cbl": true
+        }
+    },
+    "model": {
+        "conditioner": {
+            "input_dim": 4096,
+            "rnn_hidden_size": 512,
+            "rnn_num_layers": 1
+        },
+        "projection": {
+            "input_dim": 1024,
+            "hidden_dim": 2048,
+            "activation": "ReLU",
+            "dropout": 0.3,
+            "range_clipping": false
+        }
+    },
+    "roberta": {
+        "pretrained_model"  : "roberta-large",
+        "csv_path"          : "./datasets/data/data_list_for_roberta/tempo_notempo_2_2024-12-11.csv",
+        "text_column"       : "caption",
+        "id_column"         : "audiocaps_id",
+        "save_path"          : "./datasets/data/roberta_features"
+    },
+    "byola": {
+        "sample_rate": 16000,
+        "n_fft": 1024,
+        "win_length": 1024,
+        "hop_length": 160,
+        "n_mels": 64,
+        "f_min": 60,
+        "f_max": 7800,
+        "feature_d": 3072,
+        "padding_mode": "repetitive",
+        "unit_sec": 0.95,
+        "byola_model"   : "./models/byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth",
+        "train_list"    : "./datasets/data/data_list_for_byola/train_wavs_new.txt",
+        "val_list"      : "./datasets/data/data_list_for_byola/val_wavs_new.txt",
+        "test_list"     : "./datasets/data/data_list_for_byola/ev_wavs_new.txt",
+        "wav_dir"       : "./datasets/data/wav",
+        "save_path"     : "./datasets/data/byola_features",
+        "dataset": {
+            "sample_rate": 16000,
+            "unit_sec": 10,
+            "n_fft": 1024,
+            "win_length": 1024,
+            "hop_length": 160,
+            "n_mels": 64,
+            "f_min": 60,
+            "f_max": 7800,
+            "device": "cuda"
+        }
+    }
+}
