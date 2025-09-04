@@ -71,10 +71,7 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
   --index-url https://download.pytorch.org/whl/cu118
 ```
 
-### 6. Download pretrained models
-hogehoge
-
-### 7. Download datasets
+### 6. Download datasets
 hogehoge
 
 <h2 id="project-structure">📂 Project Structure</h2>
@@ -94,8 +91,8 @@ xacle_benchmark_model/
 │   ├── Byola.py
 │   ├── Roberta.py
 │   ├── xacle_benchmark_model.py
-│   ├── byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth   # Need to Download
-│   └── chkpt_benchmark_model/best_model.pt             # Need to Download
+│   ├── byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth
+│   └── chkpt_benchmark_model/best_model.pt
 ├── pics/
 └── utils/utils.py
 ```
@@ -117,11 +114,11 @@ hogehoge
 
 <h2 id="citation">📚 Citation</h2>
 
-```bibtex
+<!-- ```bibtex
 @hogehoge{xacle2026,
     title={Xacle Challenge},
     author={hogehoge},
     journal={hogehoge},
     year={hogehoge}
 }
-```
+``` -->
