@@ -5,8 +5,6 @@ import time
 from torch.utils.data import DataLoader
 from scipy.stats import spearmanr
 from transformers import AutoTokenizer
-from collections.abc import Mapping, Sequence
-from transformers.tokenization_utils_base import BatchEncoding
 
 from models.Byola import get_normalizer
 from models.xacle_benchmark_model import XACLEBenchmarkModel
@@ -15,69 +13,41 @@ from losses.loss_function import get_loss_function
 
 import utils.utils as utils
 
-def move_to_device(obj, device):
-    """
-    Recursively move tensors (and common container objects that hold tensors)
-    to the target device.
-
-    Parameters
-    ----------
-    obj : Any
-        Arbitrary object that may contain tensors (Tensor, dict-like, list-like,
-        or transformers.BatchEncoding). Non-tensor scalars/strings are left unchanged.
-    device : torch.device or str
-        Target device (e.g., "cuda:0", "cpu").
-
-    Returns
-    -------
-    Any
-        Same structure as `obj`, but with all tensors placed on `device`.
-    """
-    # 1) Single tensor → move directly
-    if isinstance(obj, torch.Tensor):
-        return obj.to(device)
-
-    # 2) HuggingFace BatchEncoding supports .to(), handle it explicitly
-    if isinstance(obj, BatchEncoding):
-        return obj.to(device)
-
-    # 3) Mapping types (dict, UserDict, etc.) → recurse on each value
-    if isinstance(obj, Mapping):
-        return {k: move_to_device(v, device) for k, v in obj.items()}
-
-    # 4) Sequence types (list, tuple, etc.) → preserve container type
-    if isinstance(obj, Sequence) and not isinstance(obj, (str, bytes)):
-        return type(obj)(move_to_device(v, device) for v in obj)
-
-    # 5) Anything else (int, float, str, Path, ...) → leave untouched
-    return obj
+import sys
+from datetime import datetime
+import json
 
 def train(cfg):
-    os.makedirs(cfg["output_dir"], exist_ok=True)
+    # -------- initial setup --------
+    now = datetime.now().strftime("%Y%m%d_%H%M%S")      # ex: 20250907_0000
+    chkpt_dir = os.path.join(cfg["output_dir"], now)    # ex: ./chkpt/20250907_0000
+    os.makedirs(chkpt_dir, exist_ok=True)
+    utils.json_dump(os.path.join(chkpt_dir, "config.json"), cfg)
+    log_txt_path = os.path.join(chkpt_dir, "log.txt")
+    sys.stdout = utils.Logger(log_txt_path)
     device = torch.device(cfg["device"])
+    # -------------------------------
 
     # -------- tokenizer / dataset / dataloader --------
-    tokenizer = AutoTokenizer.from_pretrained(cfg["roberta"]["pretrained_model"], cache_dir="./hf_cache")
-
+    tokenizer = AutoTokenizer.from_pretrained(cfg["text_encoder"]["pretrained_model"], cache_dir="./hf_cache")
     train_ds = get_dataset(
         cfg["train_list"],
-        cfg["wav_dir"],
+        os.path.join(cfg["wav_dir"], "train"),
         tokenizer=tokenizer,
         max_sec=cfg["max_len"],
-        sr=cfg["byola"]["sample_rate"],
+        sr=cfg["audio_encoder"]["sample_rate"],
         org_max=10.0,
         org_min=0.0
     )
     val_ds   = get_dataset(
-        cfg["val_list"],
-        cfg["wav_dir"],
+        cfg["validation_list"],
+        os.path.join(cfg["wav_dir"], "validation"),
         tokenizer=tokenizer,
         max_sec=cfg["max_len"],
-        sr=cfg["byola"]["sample_rate"],
+        sr=cfg["audio_encoder"]["sample_rate"],
         org_max=10.0,
         org_min=0.0
     )
-
     train_loader = DataLoader(
         train_ds,
         batch_size=cfg["batch_size"],
@@ -106,8 +76,8 @@ def train(cfg):
         patience=5
     )
     print("Prepare normalizer")
-    normalizer_train = get_normalizer(cfg["byola"], "train_list")
-    normalizer_eval  = get_normalizer(cfg["byola"], "val_list")
+    normalizer_train = get_normalizer(cfg, "train_list")
+    normalizer_eval  = get_normalizer(cfg, "validation_list")
     best_srcc, patience = -np.inf, 0
     # ------------------------------------
     print("train loader:",len(train_loader))
@@ -117,7 +87,7 @@ def train(cfg):
         epoch_loss = 0.0
         for batch in train_loader:
             # ---------- setup ----------
-            batch = move_to_device(batch, device)
+            batch = utils.move_to_device(batch, device)
             opt.zero_grad()
             # ---------------------------
 
@@ -147,7 +117,7 @@ def train(cfg):
         preds, gts = [], []
         with torch.no_grad():
             for batch in val_loader:
-                batch = move_to_device(batch, device)
+                batch = utils.move_to_device(batch, device)
                 pred  = model.forward(batch, normalizer_eval)
                 loss = loss_fn(pred, batch["scores"], batch["num_class"])
                 val_loss += loss.item()
@@ -190,7 +160,7 @@ def train(cfg):
         # ---------- early-stop ----------
         if srcc > best_srcc:
             best_srcc, patience = srcc, 0
-            torch.save(model.state_dict(), os.path.join(cfg["output_dir"], "best_model.pt"))
+            torch.save(model.state_dict(), os.path.join(chkpt_dir, "best_model.pt"))
             print("✅  best model updated")
         else:
             patience += 1

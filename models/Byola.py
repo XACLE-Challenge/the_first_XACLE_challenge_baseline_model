@@ -12,9 +12,16 @@ from .byola.byol_a.dataset import WaveInLMSOutDataset
 
 def get_normalizer(cfg, split_key):
     
-    def _load_wav_list(list_path, wav_root):
-        with open(list_path, "r") as f:
-            return [os.path.join(wav_root, line.strip().lstrip("/")) for line in f if line.strip()]
+    def _load_wav_list(list_path, wav_dir):
+        import csv
+        wav_list = []
+        with open(list_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            header = next(reader)
+            for row in reader:
+                if row and row[0].strip():
+                    wav_list.append(os.path.join(wav_dir, row[0].strip()))
+        return wav_list
     
     def _calc_norm_stats(dataset, n_stats: int = 100_000, label: str = "train"):
         n_stats = min(n_stats, len(dataset))
@@ -25,10 +32,10 @@ def get_normalizer(cfg, split_key):
         print(f"[{label}] mean={mean:.4f}, std={std:.4f}")
         return [mean, std]
 
-    list_path = cfg.get(split_key)
-    split_label = split_key.replace("_list", "")
-    wav_list = _load_wav_list(list_path, cfg["wav_dir"])
-    ds_cfg = SimpleNamespace(**cfg["dataset"])
+    list_path = cfg.get(split_key)                      # metadata list 
+    split_label = split_key.replace("_list", "")        # train or validation
+    wav_list = _load_wav_list(list_path, os.path.join(cfg["wav_dir"], split_label))
+    ds_cfg = SimpleNamespace(**cfg["audio_encoder"]["dataset"])
     stats_ds = WaveInLMSOutDataset(ds_cfg, audio_files=wav_list, labels=None, tfms=None)
     stats = _calc_norm_stats(stats_ds, label=split_label)
     return PrecomputedNorm(stats)

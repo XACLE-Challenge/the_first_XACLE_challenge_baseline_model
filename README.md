@@ -1,4 +1,4 @@
-# XACLE Challenge  Benchmark Model
+# XACLE Challenge 2026  Benchmark Model
 A benchmark model for automatic evaluation of text-audio alignment in the XACLE Challenge 2026.
 
 ## 📌 Table of Contents
@@ -8,19 +8,19 @@ A benchmark model for automatic evaluation of text-audio alignment in the XACLE 
 - [Installation](#installation)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
+- [Evaluation Code](#evaluation-code)
 - [License](#license)
 - [Citation](#citation)
 
 <h2 id="overview">📖 Overview</h2>
 
-This repository contains the benchmark model for automatic evaluation of text-audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text-audio pairs. In the benchmark model, BYOL-A is used as the Audio Encoder and RoBERTa as the Text Encoder, and score prediction is performed using the features extracted from these encoders along with listener embeddings. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
+This repository contains the benchmark model for automatic evaluation of text-audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text-audio pairs. In the benchmark model, BYOL-A is used as the Audio Encoder and RoBERTa as the Text Encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
 ![Overview of score prediction of audio-text alignment](pics/XACLE-Challenge-overview.png)
 
 <h2 id="features">✨ Features</h2>
 
 - Automatically evaluates text-audio alignment scores.
 - Supports BYOL-A (Audio Encoder) and RoBERTa (Text Encoder)
-- Uses listener embeddings to improve prediction accuracy.
 - Provides ready-to-use trained benchmark model.
 
 <h2 id="requirements">💻 Requirements</h2>
@@ -44,10 +44,10 @@ This repository contains the benchmark model for automatic evaluation of text-au
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/XACLE-Challenge/XACLE_benchmark_model.git
+git clone https://github.com/XACLE-Challenge/XACLE2026_benchmark_model.git
 ```
 ```bash
-cd xacle_benchmark_model
+cd cloned-repository
 ```
 ### 2. Create and activate a virtual environment
 ```bash
@@ -77,43 +77,70 @@ hogehoge
 <h2 id="project-structure">📂 Project Structure</h2>
 
 ```bash
-xacle_benchmark_model/
+xacle2026_benchmark_model/
 ├── README.md
+├── LICENSE
 ├── requirements.txt
 ├── config.json
+├── evaluate.py
 ├── inference.py
 ├── train.py
+├── chkpt/trained_benchmark_model/  # Need to Download
 ├── datasets/
 │   ├── xacle_benchmark_dataset.py
-│   └── data/ # Need to Download
+│   └── XACLE_dataset/              # Need to Download
 ├── losses/loss_function.py
 ├── models/
 │   ├── Byola.py
 │   ├── Roberta.py
 │   ├── xacle_benchmark_model.py
-│   ├── byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth
-│   └── chkpt_benchmark_model/best_model.pt
+│   └── byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth
 ├── pics/
 └── utils/utils.py
 ```
 
 <h2 id="usage">🚀 Usage</h2>
 
-### For training
+### For training (When learning from scratch)
 ```bash
 python train.py
 ```
+- A directory named "chkpt" is created, and within it, subdirectories based on the time when the learning proguram was executed are created (e.g., 20250901_1200).
+- The JSON file (config.json) containing the learning settings is copied to the created subdirectory.
+- The best model is saved as "best_model.pt" in the subdirectory.
+- Training logs can be viewed via standard output and are saved as "log.txt" in the subdirectory created upon training completion.
 ### For Inference
 ```bash
-python inference.py
+python inference.py <chkpt_subdir_name> <dataset_key>
 ```
+- Perform inference using the trained model.
+- Cmd-Line argument descriptions
+  - <chkpt_subdir_name>: Subdirectory name created during learning program execution (where the learning model is saved) (e.g., 20250901_1200)
+  - <dataset_key>: Specify which dataset to use for inference.　Enter either *validation or test. If no argument is provided, inference will be performed on the validation data by default.
+- Inference results are saved as "inferece_result_for_<dataset_key>.csv" in the subdirectory (<chkpt_subdir_name>).
+  - The inference results are stored with the audio file name as the column name and the prediction score as the column name.
+- *Finally, you will be asked to submit the score prediction results for the test (inference_result_for_test.csv).
+
+<h2 id="evaluation-code">✔ Evaluation Code</h2>
+
+### For evaluation of the score prediction results for the validation data
+```bash
+python evaluate.py <chkpt_subdir_name>
+```
+- Cmd-Line argument descriptions
+  - <chkpt_subdir_name>: Subdirectory name containing the CSV file with inference results to be evaluated (for validation data).
+- Using the predicted values and ground truth values for the validation data, it calculates SRCC, LCC, KTAU, and MSE.
+  - *This program cannot be used for predicting values on test data because ground truth is required.
+- The results for SRCC, LCC, KTAU, MSE, and number of evaluation data are written to a file named "metricts_result_for_validation.csv" in the subdirectory.
 
 <h2 id="license">📄 License</h2>
 
-hogehoge
+This project is licensed under the **MIT License**.
+
+You are free to use, modify, and distribute this software, with or without modifications, under the conditions of the MIT License. See the [LICENSE](./LICENSE) file for full licese text.
 
 <h2 id="citation">📚 Citation</h2>
-
+Under preparation...
 <!-- ```bibtex
 @hogehoge{xacle2026,
     title={Xacle Challenge},

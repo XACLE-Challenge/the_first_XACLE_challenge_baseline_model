@@ -1,9 +1,9 @@
 {
-    "train_list"    : "./datasets/data/data_list_for_benchmark_model/train_mos.txt",
-    "val_list"      : "./datasets/data/data_list_for_benchmark_model/val_mos.txt",
-    "test_list"     : "./datasets/data/data_list_for_benchmark_model/ev_mos.txt",
-    "wav_dir"       : "./datasets/data/wav",
-    "output_dir"    : "./models/chkpt_benchmark_model",
+    "train_list"            : "./datasets/XACLE_dataset/meta_data/train_average.csv",
+    "validation_list"       : "./datasets/XACLE_dataset/meta_data/validation_average.csv",
+    "test_list"             : "./datasets/XACLE_dataset/meta_data/test_average.csv",
+    "wav_dir"       : "./datasets/XACLE_dataset/wav",
+    "output_dir"    : "./chkpt",
     "batch_size": 12,
     "val_batch_size": 1,
     "lr": 2e-5,
@@ -40,14 +40,14 @@
             "range_clipping": false
         }
     },
-    "roberta": {
+    "text_encoder": {
         "pretrained_model"  : "roberta-large",
         "csv_path"          : "./datasets/data/data_list_for_roberta/tempo_notempo_2_2024-12-11.csv",
         "text_column"       : "caption",
         "id_column"         : "audiocaps_id",
         "save_path"          : "./datasets/data/roberta_features"
     },
-    "byola": {
+    "audio_encoder": {
         "sample_rate": 16000,
         "n_fft": 1024,
         "win_length": 1024,
@@ -59,10 +59,6 @@
         "padding_mode": "repetitive",
         "unit_sec": 0.95,
         "byola_model"   : "./models/byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth",
-        "train_list"    : "./datasets/data/data_list_for_byola/train_wavs_new.txt",
-        "val_list"      : "./datasets/data/data_list_for_byola/val_wavs_new.txt",
-        "test_list"     : "./datasets/data/data_list_for_byola/ev_wavs_new.txt",
-        "wav_dir"       : "./datasets/data/wav",
         "save_path"     : "./datasets/data/byola_features",
         "dataset": {
             "sample_rate": 16000,

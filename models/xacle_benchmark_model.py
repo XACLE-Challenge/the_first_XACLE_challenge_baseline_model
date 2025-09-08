@@ -9,21 +9,21 @@ class XACLEBenchmarkModel(nn.Module):
         self.device = device
         ## Text Encoder
         self.text_encoder = TextEncoder(
-            model_name  = cfg["roberta"]["pretrained_model"],
+            model_name  = cfg["text_encoder"]["pretrained_model"],
             device      = self.device
         )
         ## Audio Encoder
         self.audio_encoder = AudioEncoder(
-            model_path    = cfg["byola"]["byola_model"],
+            model_path    = cfg["audio_encoder"]["byola_model"],
             device        = self.device,
-            n_mels        = cfg["byola"]["n_mels"],
-            feature_d     = cfg["byola"]["feature_d"],
-            sr            = cfg["byola"]["sample_rate"],
-            n_fft         = cfg["byola"]["n_fft"],
-            win_length    = cfg["byola"]["win_length"],
-            hop_length    = cfg["byola"]["hop_length"],
-            fmin          = cfg["byola"]["f_min"],
-            fmax          = cfg["byola"]["f_max"]
+            n_mels        = cfg["audio_encoder"]["n_mels"],
+            feature_d     = cfg["audio_encoder"]["feature_d"],
+            sr            = cfg["audio_encoder"]["sample_rate"],
+            n_fft         = cfg["audio_encoder"]["n_fft"],
+            win_length    = cfg["audio_encoder"]["win_length"],
+            hop_length    = cfg["audio_encoder"]["hop_length"],
+            fmin          = cfg["audio_encoder"]["f_min"],
+            fmax          = cfg["audio_encoder"]["f_max"]
         )
         ## LDConditioner
         self.ldconditioner = LDConditioner(
