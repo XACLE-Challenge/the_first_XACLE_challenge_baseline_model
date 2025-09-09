@@ -71,8 +71,20 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
   --index-url https://download.pytorch.org/whl/cu118
 ```
 
-### 6. Download datasets
-hogehoge
+### 6. Download datasets and a pretrained benchmark model
+- **Datasets**
+  - Please send an email to [dataset@xacle.org](mailto:dataset@xacle.org). When you send the email, please include "**Download dataset**" in the subject line. You can obtain the dataset immediately via an automated reply.
+  - After downloading the dataset, please place it in the **datasets** directory.
+- **A prerained benchmark model**
+  - A pretrained benchmark model can be downloaded from [here](https://y-okamoto.sakura.ne.jp/XACLE_Challenge/2025/baseline_model/trained_benchmark_model.zip)
+  - For details about the files contained within
+    - *best_model.pt* : The saved model
+    - *config.json* : The configuration file used for training
+    - *inference_result_for_validation.csv* : Inference results on the validation data using *best_model.pt*
+    - *log.txt* : Standart output results during training
+    - *metricts_result_for_validation.csv* : Evaluation results of the inference outputs in *inference_result_for_validation.csv*
+
+- **Regarding the placement of these directories, please refer to the [Project Structure](#project-structure).**
 
 <h2 id="project-structure">📂 Project Structure</h2>
 
