@@ -83,6 +83,7 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
     - *inference_result_for_validation.csv* : Inference results on the validation data using *best_model.pt*
     - *log.txt* : Standart output results during training
     - *metricts_result_for_validation.csv* : Evaluation results of the inference outputs in *inference_result_for_validation.csv*
+  - After downloading a pretrained model, please place it in the **chkpt** directory.
 
 - **Regarding the placement of these directories, please refer to the [Project Structure](#project-structure).**
 
