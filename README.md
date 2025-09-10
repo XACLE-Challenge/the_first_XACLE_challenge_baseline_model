@@ -15,8 +15,9 @@ A baseline model for automatic evaluation of text–audio alignment in the first
 <h2 id="overview">📖 Overview</h2>
 
 This repository contains the baseline model for automatic evaluation of text–audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text–audio pairs. In the baseline model, BYOL-A is used as the audio encoder and RoBERTa as the text encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
-![Overview of score prediction of audio-text alignment](pics/task_overview.png)
-
+<p align="center">
+<img src="pics/task_overview.png" alt="Overview of score prediction of audio–text alignment" width="400">
+</p>
 <h2 id="features">✨ Features</h2>
 
 - Automatically evaluates text–audio alignment scores.
