@@ -1,5 +1,5 @@
-# XACLE Challenge 2026  Benchmark Model
-A benchmark model for automatic evaluation of text-audio alignment in the XACLE Challenge 2026.
+# The first XACLE Challenge Baseline Model
+A baseline model for automatic evaluation of text–audio alignment in the first XACLE Challenge.
 
 ## 📌 Table of Contents
 - [Overview](#overview)
@@ -14,14 +14,14 @@ A benchmark model for automatic evaluation of text-audio alignment in the XACLE 
 
 <h2 id="overview">📖 Overview</h2>
 
-This repository contains the benchmark model for automatic evaluation of text-audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text-audio pairs. In the benchmark model, BYOL-A is used as the Audio Encoder and RoBERTa as the Text Encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
-![Overview of score prediction of audio-text alignment](pics/XACLE-Challenge-overview.png)
+This repository contains the baseline model for automatic evaluation of text–audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text–audio pairs. In the baseline model, BYOL-A is used as the audio encoder and RoBERTa as the text encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
+![Overview of score prediction of audio-text alignment](pics/task_overview.png)
 
 <h2 id="features">✨ Features</h2>
 
-- Automatically evaluates text-audio alignment scores.
+- Automatically evaluates text–audio alignment scores.
 - Supports BYOL-A (Audio Encoder) and RoBERTa (Text Encoder)
-- Provides ready-to-use trained benchmark model.
+- Provides ready-to-use trained baseline model.
 
 <h2 id="requirements">💻 Requirements</h2>
 
@@ -44,7 +44,7 @@ This repository contains the benchmark model for automatic evaluation of text-au
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/XACLE-Challenge/XACLE2026_benchmark_model.git
+git clone https://github.com/XACLE-Challenge/XACLE2026_baseline_model.git
 ```
 ```bash
 cd cloned-repository
@@ -71,12 +71,12 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
   --index-url https://download.pytorch.org/whl/cu118
 ```
 
-### 6. Download datasets and a pretrained benchmark model
+### 6. Download datasets and a pretrained baseline model
 - **Datasets**
   - Please send an email to [dataset@xacle.org](mailto:dataset@xacle.org). When you send the email, please include "**Download dataset**" in the subject line. You can obtain the dataset immediately via an automated reply.
   - After downloading the dataset, please place it in the **datasets** directory.
-- **A prerained benchmark model**
-  - A pretrained benchmark model can be downloaded from [here](https://y-okamoto.sakura.ne.jp/XACLE_Challenge/2025/baseline_model/trained_benchmark_model.zip)
+- **A prerained baseline model**
+  - A pretrained baseline model can be downloaded from [here](https://y-okamoto.sakura.ne.jp/XACLE_Challenge/2025/baseline_model/trained_baseline_model.zip)
   - For details about the files contained within
     - *best_model.pt* : The saved model
     - *config.json* : The configuration file used for training
@@ -90,7 +90,7 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
 <h2 id="project-structure">📂 Project Structure</h2>
 
 ```bash
-xacle2026_benchmark_model/
+xacle2026_baseline_model/
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
@@ -98,15 +98,15 @@ xacle2026_benchmark_model/
 ├── evaluate.py
 ├── inference.py
 ├── train.py
-├── chkpt/trained_benchmark_model/  # Need to Download
+├── chkpt/trained_baseline_model/  # Need to Download
 ├── datasets/
-│   ├── xacle_benchmark_dataset.py
+│   ├── xacle_baseline_dataset.py
 │   └── XACLE_dataset/              # Need to Download
 ├── losses/loss_function.py
 ├── models/
 │   ├── Byola.py
 │   ├── Roberta.py
-│   ├── xacle_benchmark_model.py
+│   ├── xacle_baseline_model.py
 │   └── byola/chkpt/AudioNTT2022-BYOLA-64x96d2048.pth
 ├── pics/
 └── utils/utils.py

@@ -4,8 +4,8 @@ import numpy as np
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 from models.Byola import get_normalizer
-from models.xacle_benchmark_model import XACLEBenchmarkModel
-from datasets.xacle_benchmark_dataset import get_infdataset
+from models.xacle_baseline_model import XACLEBaselineModel
+from datasets.xacle_baseline_dataset import get_infdataset
 import utils.utils as utils
 from tqdm import tqdm
 import csv
@@ -64,7 +64,7 @@ def inference():
     # -------------------------------------------------
 
     # -------- model / normalizer --------
-    model = XACLEBenchmarkModel(cfg, device).to(device)
+    model = XACLEBaselineModel(cfg, device).to(device)
     chkpt = torch.load(chkpt_path, map_location=device)
     model.load_state_dict(chkpt, strict=True)
     model.eval()

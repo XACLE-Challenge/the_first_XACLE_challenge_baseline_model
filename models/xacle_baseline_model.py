@@ -3,7 +3,7 @@ import torch.nn as nn
 from .Roberta import RoBERTa as TextEncoder
 from .Byola import Byola as AudioEncoder
 
-class XACLEBenchmarkModel(nn.Module):
+class XACLEBaselineModel(nn.Module):
     def __init__(self, cfg, device):
         super().__init__()
         self.device = device

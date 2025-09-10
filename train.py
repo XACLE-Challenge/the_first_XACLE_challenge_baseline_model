@@ -7,8 +7,8 @@ from scipy.stats import spearmanr
 from transformers import AutoTokenizer
 
 from models.Byola import get_normalizer
-from models.xacle_benchmark_model import XACLEBenchmarkModel
-from datasets.xacle_benchmark_dataset import get_dataset
+from models.xacle_baseline_model import XACLEBaselineModel
+from datasets.xacle_baseline_dataset import get_dataset
 from losses.loss_function import get_loss_function
 
 import utils.utils as utils
@@ -66,7 +66,7 @@ def train(cfg):
     # -------------------------------------------------
 
     # -------- model / loss / opt --------
-    model = XACLEBenchmarkModel(cfg, device).to(device)
+    model = XACLEBaselineModel(cfg, device).to(device)
     loss_fn  = get_loss_function(cfg["loss"])
     opt = torch.optim.Adam(model.parameters(), lr=cfg["lr"], weight_decay=1e-5)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
