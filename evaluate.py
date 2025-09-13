@@ -167,7 +167,7 @@ def main(result_csv_path, valid_list_path, save_csv_path):
 if __name__ == "__main__":
     # Usage: python evaluate.py <inference_csv_path> <validation_list_path> <save_dir>
     if len(sys.argv) < 4:
-        print("Usage: python evaluate.py <inference_csv_path> <validation_list_path> <save_dir>")
+        print("Usage: python evaluate.py <inference_csv_path> <validation_csv_path> <save_dir>")
         sys.exit(1)
 
     inference_csv_path   = sys.argv[1]
