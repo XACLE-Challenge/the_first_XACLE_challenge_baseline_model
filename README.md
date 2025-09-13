@@ -129,9 +129,9 @@ python inference.py <chkpt_subdir_name> <dataset_key>
 ```
 - Perform inference using the trained model.
 - Cmd-Line argument descriptions
-  - <chkpt_subdir_name>: Subdirectory name created during learning program execution (where the learning model is saved) (e.g., 20250901_1200)
-  - <dataset_key>: Specify which dataset to use for inference.　Enter either *validation or test. If no argument is provided, inference will be performed on the validation data by default.
-- Inference results are saved as "inferece_result_for_<dataset_key>.csv" in the subdirectory (<chkpt_subdir_name>).
+  - `<chkpt_subdir_name>`: Subdirectory name created during learning program execution (where the learning model is saved) (e.g., 20250901_1200)
+  - `<dataset_key>`: Specify which dataset to use for inference.　Enter either *validation or test. If no argument is provided, inference will be performed on the validation data by default.
+- Inference results are saved as "inferece_result_for_<dataset_key>.csv" in the subdirectory (`<chkpt_subdir_name>`).
   - The inference results are stored with the audio file name as the column name and the prediction score as the column name.
 - *Finally, you will be asked to submit the score prediction results for the test (inference_result_for_test.csv).
 
@@ -139,13 +139,15 @@ python inference.py <chkpt_subdir_name> <dataset_key>
 
 ### For evaluation of the score prediction results for the validation data
 ```bash
-python evaluate.py <chkpt_subdir_name>
+python evaluate.py <inference_csv_path> <validation_list_path> <save_dir>
 ```
 - Cmd-Line argument descriptions
-  - <chkpt_subdir_name>: Subdirectory name containing the CSV file with inference results to be evaluated (for validation data).
+  - `<inference_csv_path>`: Path to the CSV file containing the inference results for the validation data
+  - `<validation_list_path>`: Path to the ground-truth validation list file
+  - `<save_dir>`: Directory where the evaluation result will be saved (the output file name is fixed as evaluation_result.csv)
 - Using the predicted values and ground truth values for the validation data, it calculates SRCC, LCC, KTAU, and MSE.
   - *This program cannot be used for predicting values on test data because ground truth is required.
-- The results for SRCC, LCC, KTAU, MSE, and number of evaluation data are written to a file named "metricts_result_for_validation.csv" in the subdirectory.
+- The results for SRCC, LCC, KTAU, MSE, and the number of evaluation data are written to a file named evaluation_result.csv inside `<save_dir>`.
 
 <h2 id="license">📄 License</h2>
 

@@ -148,7 +148,7 @@ def evaluate_all(pred, gt):
         "N"   : len(pairs),
     }
 
-def main(chkpt_dir, result_csv_path, valid_list_path):
+def main(result_csv_path, valid_list_path, save_csv_path):
     df_pred = pd.read_csv(result_csv_path)
     df_ref  = pd.read_csv(valid_list_path, usecols=["wav_file_name", "average_score"])
     df_cat  = pd.merge(df_pred, df_ref, on="wav_file_name", how="inner")
@@ -156,7 +156,7 @@ def main(chkpt_dir, result_csv_path, valid_list_path):
     gt   = df_cat["average_score"].tolist()
 
     result = evaluate_all(pred, gt)
-    with open(os.path.join(chkpt_dir, "metricts_result_for_validation.csv"), "w", newline="", encoding="utf-8") as f:
+    with open(save_csv_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["metric", "value"])
         for k in ["SRCC", "LCC", "KTAU", "MSE", "N"]:
@@ -165,24 +165,39 @@ def main(chkpt_dir, result_csv_path, valid_list_path):
     return
 
 if __name__ == "__main__":
-    # python evaluate.py chkpt_dir
-    if len(sys.argv) < 2:
-        print("Usage: ptyhon evaluate.py chkpt_dir_name")
+    # Usage: python evaluate.py <inference_csv_path> <validation_list_path> <save_dir>
+    if len(sys.argv) < 4:
+        print("Usage: python evaluate.py <inference_csv_path> <validation_list_path> <save_dir>")
         sys.exit(1)
-    chkpt_dir = os.path.join("./chkpt", sys.argv[1])
-    if not os.path.isdir(chkpt_dir):
-        print(f"Error: CheckPoint Directory {chkpt_dir} does not exist.")
-        sys.exit(1)
-    cfg_path   = os.path.join(chkpt_dir, "config.json")
-    if not os.path.isfile(cfg_path):
-        print(f"Error: Expected Config file does not exist")
-    result_csv_path = os.path.join(chkpt_dir, "inference_result_for_validation.csv")
-    if not os.path.isfile(result_csv_path):
-        print(f"Error: Expected result csv does not exist")
-    cfg = utils.load_config(cfg_path)
-    valid_list_path = cfg["validation_list"]
 
-    print("The evalution will be conducted based on the following two files.")
-    print(f"\t- {result_csv_path}")
-    print(f"\t- {valid_list_path}")
-    main(chkpt_dir, result_csv_path, valid_list_path)
+    inference_csv_path   = sys.argv[1]
+    validation_list_path = sys.argv[2]
+    save_dir             = sys.argv[3]
+
+    # Validate inputs
+    if not os.path.isfile(inference_csv_path):
+        print(f"Error: Inference CSV not found: {inference_csv_path}")
+        sys.exit(1)
+
+    if not os.path.isfile(validation_list_path):
+        print(f"Error: Validation list not found: {validation_list_path}")
+        sys.exit(1)
+
+    # Ensure save directory exists (create if missing)
+    try:
+        os.makedirs(save_dir, exist_ok=True)
+    except OSError as e:
+        print(f"Error: Failed to create save directory '{save_dir}': {e}")
+        sys.exit(1)
+
+    # Fixed output filename inside the specified save directory
+    save_csv_path = os.path.join(save_dir, "evaluation_result.csv")
+
+    # Logging
+    print("The evaluation will be conducted based on the following two files:")
+    print(f"\t- {os.path.abspath(inference_csv_path)}")
+    print(f"\t- {os.path.abspath(validation_list_path)}")
+    print(f"The result will be saved to: {os.path.abspath(save_csv_path)}")
+
+    # Call main with three arguments (CSV paths + fixed save file path)
+    main(inference_csv_path, validation_list_path, save_csv_path)
