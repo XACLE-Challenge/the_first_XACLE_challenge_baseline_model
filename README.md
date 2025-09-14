@@ -139,15 +139,15 @@ python inference.py <chkpt_subdir_name> <dataset_key>
 
 ### For evaluation of the score prediction results for the validation data
 ```bash
-python evaluate.py <inference_csv_path> <ground_truth_csv_path> <save_dir>
+python evaluate.py <inference_csv_path> <ground_truth_csv_path> <save_results_dir>
 ```
 - Cmd-Line argument descriptions
   - `<inference_csv_path>`: Path to the CSV file containing the inference results for the validation data.
   - `<ground_truth_csv_path>`: Path to the CSV file containing the ground-truth scores for the validation data in XACLE dataset (validation_average.csv). 
-  - `<save_dir>`: Directory where the evaluation result will be saved (the output file name is fixed as evaluation_result.csv)
+  - `<save_results_dir>`: Directory where the evaluation result will be saved (the output file name is fixed as evaluation_result.csv)
 - Using the predicted scores and ground-truth scores for the validation data, it calculates SRCC, LCC, KTAU, and MSE.
   - *This program cannot be used for predicting scores on test data because ground-truth is required.
-- The results for SRCC, LCC, KTAU, MSE, and the number of evaluation data are written to a file named evaluation_result.csv inside `<save_dir>`.
+- The results for SRCC, LCC, KTAU, MSE, and the number of evaluation data are written to a file named evaluation_result.csv inside `<save_results_dir>`.
 
 <h2 id="result">💯 Results of baseline model for validation data</h2>
 
