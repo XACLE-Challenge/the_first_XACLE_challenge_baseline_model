@@ -1,6 +1,3 @@
-# The first XACLE Challenge Baseline Model
-A baseline model for automatic evaluation of text–audio alignment in the first XACLE Challenge.
-
 ## 📌 Table of Contents
 - [Overview](#overview)
 - [Features](#features)
@@ -9,12 +6,13 @@ A baseline model for automatic evaluation of text–audio alignment in the first
 - [Project Structure](#project-structure)
 - [Usage](#usage)
 - [Evaluation Code](#evaluation-code)
+- [Result](#result)
 - [License](#license)
 - [Citation](#citation)
 
 <h2 id="overview">📖 Overview</h2>
 
-This repository contains the baseline model for automatic evaluation of text–audio alignment in the [XACLE Challenge 2026](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text–audio pairs. In the baseline model, BYOL-A is used as the audio encoder and RoBERTa as the text encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
+This repository contains the baseline model for automatic evaluation of text–audio alignment in [the first XACLE challenge](https://xacle.org/index.html). It provides a model trained to estimate subjective evaluation scores from text–audio pairs. In the baseline model, BYOL-A is used as the audio encoder and RoBERTa as the text encoder, and score prediction is performed using the features extracted from these encoders. <br>We sincerely thank the authors for sharing the official code and facilitating the advancement of academia. <br><br>
 <p align="center">
 <img src="pics/task_overview.png" alt="Overview of score prediction of audio–text alignment" width="400">
 </p>
@@ -62,7 +60,7 @@ python -m pip install --upgrade "pip<24.1"
 
 ### 4. Install required packages
 ```bash
-pip instal -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 5. Install Torch
@@ -74,7 +72,9 @@ pip install torch==2.2.0+cu118 torchaudio==2.2.0+cu118 \
 
 ### 6. Download datasets and a pretrained baseline model
 - **Datasets**
-  - Please send an email to [dataset@xacle.org](mailto:dataset@xacle.org). When you send the email, please include "**Download dataset**" in the subject line. You can obtain the dataset immediately via an automated reply.
+  - To download the dataset, please send an email to [dataset@xacle.org](mailto:dataset@xacle.org) with “**Download dataset**” in the subject line. You will receive an automated reply with the download link.
+
+
   - After downloading the dataset, please place it in the **datasets** directory.
 - **A prerained baseline model**
   - A pretrained baseline model can be downloaded from [here](https://y-okamoto.sakura.ne.jp/XACLE_Challenge/2025/baseline_model/trained_baseline_model.zip)
@@ -133,21 +133,28 @@ python inference.py <chkpt_subdir_name> <dataset_key>
   - `<dataset_key>`: Specify which dataset to use for inference.　Enter either *validation or test. If no argument is provided, inference will be performed on the validation data by default.
 - Inference results are saved as "inferece_result_for_<dataset_key>.csv" in the subdirectory (`<chkpt_subdir_name>`).
   - The inference results are stored with the audio file name as the column name and the prediction score as the column name.
-- *Finally, you will be asked to submit the score prediction results for the test (inference_result_for_test.csv).
 
 <h2 id="evaluation-code">✔ Evaluation Code</h2>
 
 ### For evaluation of the score prediction results for the validation data
 ```bash
-python evaluate.py <inference_csv_path> <validation_csv_path> <save_dir>
+python evaluate.py <inference_csv_path> <ground_truth_csv_path> <save_dir>
 ```
 - Cmd-Line argument descriptions
-  - `<inference_csv_path>`: Path to the CSV file containing the inference results for the validation data
-  - `<validation_csv_path>`: Path to the CSV file containing the ground-truth scores for the validation data
+  - `<inference_csv_path>`: Path to the CSV file containing the inference results for the validation data.
+  - `<ground_truth_csv_path>`: Path to the CSV file containing the ground-truth scores for the validation data in XACLE dataset (validation_average.csv). 
   - `<save_dir>`: Directory where the evaluation result will be saved (the output file name is fixed as evaluation_result.csv)
 - Using the predicted scores and ground-truth scores for the validation data, it calculates SRCC, LCC, KTAU, and MSE.
   - *This program cannot be used for predicting scores on test data because ground-truth is required.
 - The results for SRCC, LCC, KTAU, MSE, and the number of evaluation data are written to a file named evaluation_result.csv inside `<save_dir>`.
+
+<h2 id="result">💯 Results of baseline model for validation data</h2>
+
+
+|  | SRCC | LCC | KTAU | MSE |
+| :--- | ---: | ---: | ---: | ---: |
+| Baseline | 0.384 |  0.396 | 0.264 | 4.836 |
+
 
 <h2 id="license">📄 License</h2>
 
