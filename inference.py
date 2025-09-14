@@ -30,10 +30,12 @@ def inference():
         print(f"Error: Expected Config file does not exist")
     if len(sys.argv) == 2:
         dataset_key = "validation"
+    elif sys.argv[2] == "validation":
+        dataset_key = "validation"
     elif sys.argv[2] == "test":
         dataset_key = "test"
     else:
-        print("Error: Specify the evaluation dataset using the third command-line arguments.")
+        print("Error: Specify the evaluation dataset using the third command-line arguments.: 'validation' or 'test'")
     cfg = utils.load_config(cfg_path)
     dataset_label   = f"{dataset_key}_list"
     dataset_list    = cfg[dataset_label]
