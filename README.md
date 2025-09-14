@@ -174,7 +174,7 @@ Under preparation...
 }
 ``` -->
 
-<h2 id="contributors">🧑‍💻Contributors<h2>
+<h2 id="contributors">🧑‍💻Contributors</h2>
 
 - Riki Takizawa (Kyoto Sangyo University, Japan)
 - Yusuke Kanamori (The University of Tokyo, Japan)
