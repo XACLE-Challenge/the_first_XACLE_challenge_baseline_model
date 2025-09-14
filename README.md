@@ -9,6 +9,7 @@
 - [Result](#result)
 - [License](#license)
 - [Citation](#citation)
+- 
 
 <h2 id="overview">📖 Overview</h2>
 
@@ -172,3 +173,9 @@ Under preparation...
     year={hogehoge}
 }
 ``` -->
+
+<h2 id="contributors">🧑‍💻Contributors<h2>
+
+- Riki Takizawa (Kyoto Sangyo University, Japan)
+- Yusuke Kanamori (The University of Tokyo, Japan)
+- Yuki Okamoto (The University of Tokyo, Japan)
